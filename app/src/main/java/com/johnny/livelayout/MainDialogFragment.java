@@ -13,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import java.util.Objects;
+
 /**
  * 可以看得出来这是个全屏dailogFragment，他的内部有一个pager
  * 分别控制着EmptyFragment与LayerFragment
  * EmptyFragment：什么都没有
  * LayerFragment：交互界面
  * 这样就达到了滑动隐藏交互的需求，这样做也是为了避免我们自定义动画时，显示卡顿的问题
- *
+ * <p>
  * Success is the sum of small efforts, repeated day in and day out.
  * 成功就是日复一日那一点点小小努力的积累。
  * AndroidGroup：158423375
@@ -31,7 +33,6 @@ import android.view.WindowManager;
  */
 public class MainDialogFragment extends DialogFragment {
 
-    private ViewPager viewPager;
     private LayerFragment layerFragment;
 
     @Nullable
@@ -43,50 +44,59 @@ public class MainDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if(position == 0){
-                    return new EmptyFragment();/*返回空界面的fragment*/
-                }else if (position == 1){
-                    return layerFragment=new LayerFragment();/*返回交互界面的fragment*/
+                if (position == 0) {
+                    /*返回空界面的fragment*/
+                    return new EmptyFragment();
+                } else if (position == 1) {
+                    /*返回交互界面的fragment*/
+                    return layerFragment = new LayerFragment();
                 }
                 return null;
             }
+
             @Override
             public int getCount() {
                 return 2;
             }
         });
-        viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
-        viewPager.setCurrentItem(1);/*设置默认显示交互界面*/
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);/*同时将界面改为resize已达到软键盘弹出时LiveFragment不会跟随移动*/
+        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
+        /*设置默认显示交互界面*/
+        viewPager.setCurrentItem(1);
+        /*同时将界面改为resize已达到软键盘弹出时LiveFragment不会跟随移动*/
+        Objects.requireNonNull(getDialog().getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.MainDialog){/*设置MainDialogFragment的样式，这里的代码最好还是用我的，大家不要改动*/
+        /*设置MainDialogFragment的样式，这里的代码最好还是用我的，大家不要改动*/
+        return new Dialog(getActivity(), R.style.MainDialog) {
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
                 getActivity().finish();
             }
         };
-        return dialog;
     }
 
     private class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
-        public void onPageScrolled(int position, float positionOffset,int positionOffsetPixels) {}
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
         @Override
         public void onPageSelected(int position) {
-            if(position==0){
+            if (position == 0) {
                 layerFragment.hideKeyboard();
             }
         }
+
         @Override
-        public void onPageScrollStateChanged(int state) {}
+        public void onPageScrollStateChanged(int state) {
+        }
     }
 }

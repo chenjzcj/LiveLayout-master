@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 /**
  * 该Fragment是用于MainDialogFragment中的pager，为了实现滑动隐藏交互Fragment的
  * 这个大家可以不用修改，但是根据各自的需求而定
- *
+ * <p>
  * Success is the sum of small efforts, repeated day in and day out.
  * 成功就是日复一日那一点点小小努力的积累。
  * AndroidGroup：158423375
