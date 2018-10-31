@@ -57,7 +57,7 @@
             android:id="@+id/hlvaudience"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginLeft="10dp"></com.johnny.livelayout.HorizontalListView>
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
     <RelativeLayout
