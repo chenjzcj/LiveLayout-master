@@ -195,6 +195,7 @@ public class LayerFragment extends Fragment implements View.OnClickListener {
     /**
      * 添加礼物view,(考虑垃圾回收)
      */
+    @SuppressLint("InflateParams")
     private View addGiftView() {
         View view;
         if (giftViewCollection.size() <= 0) {
@@ -263,26 +264,37 @@ public class LayerFragment extends Fragment implements View.OnClickListener {
                 View giftView2 = llgiftcontent.getChildAt(1);
                 CustomRoundView picTv2 = (CustomRoundView) giftView2.findViewById(R.id.crvheadimage);
                 long lastTime2 = (Long) picTv2.getTag();
-                if (lastTime1 > lastTime2) {/*如果第二个View显示的时间比较长*/
+                /*如果第二个View显示的时间比较长*/
+                if (lastTime1 > lastTime2) {
                     removeGiftView(1);
                 } else {/*如果第一个View显示的时间长*/
                     removeGiftView(0);
                 }
             }
 
-            giftView = addGiftView();/*获取礼物的View的布局*/
-            giftView.setTag(tag);/*设置view标识*/
+            /*获取礼物的View的布局*/
+            giftView = addGiftView();
+            /*设置view标识*/
+            giftView.setTag(tag);
 
             CustomRoundView crvheadimage = (CustomRoundView) giftView.findViewById(R.id.crvheadimage);
-            final MagicTextView giftNum = (MagicTextView) giftView.findViewById(R.id.giftNum);/*找到数量控件*/
-            giftNum.setText("x1");/*设置礼物数量*/
-            crvheadimage.setTag(System.currentTimeMillis());/*设置时间标记*/
-            giftNum.setTag(1);/*给数量控件设置标记*/
+            /*找到数量控件*/
+            final MagicTextView giftNum = (MagicTextView) giftView.findViewById(R.id.giftNum);
+            /*设置礼物数量*/
+            giftNum.setText("x1");
+            /*设置时间标记*/
+            crvheadimage.setTag(System.currentTimeMillis());
+            /*给数量控件设置标记*/
+            giftNum.setTag(1);
 
-            llgiftcontent.addView(giftView);/*将礼物的View添加到礼物的ViewGroup中*/
-            llgiftcontent.invalidate();/*刷新该view*/
-            giftView.startAnimation(inAnim);/*开始执行显示礼物的动画*/
-            inAnim.setAnimationListener(new Animation.AnimationListener() {/*显示动画的监听*/
+            /*将礼物的View添加到礼物的ViewGroup中*/
+            llgiftcontent.addView(giftView);
+            /*刷新该view*/
+            llgiftcontent.invalidate();
+            /*开始执行显示礼物的动画*/
+            giftView.startAnimation(inAnim);
+            /*显示动画的监听*/
+            inAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
                 }
@@ -327,8 +339,9 @@ public class LayerFragment extends Fragment implements View.OnClickListener {
             messageAdapter.NotifyAdapter(messageData);
             lvmessage.setSelection(messageData.size());
             hideKeyboard();
-        } else
+        } else {
             hideKeyboard();
+        }
     }
 
     /**
@@ -405,7 +418,8 @@ public class LayerFragment extends Fragment implements View.OnClickListener {
      * @param showhide
      */
     private void dynamicChangeGiftParentH(boolean showhide) {
-        if (showhide) {/*如果软键盘显示中*/
+        /*如果软键盘显示中*/
+        if (showhide) {
             if (llgiftcontent.getChildCount() != 0) {
                 /*判断是否有礼物显示，如果有就修改父布局高度，如果没有就不作任何操作*/
                 ViewGroup.LayoutParams layoutParams = llgiftcontent.getLayoutParams();
